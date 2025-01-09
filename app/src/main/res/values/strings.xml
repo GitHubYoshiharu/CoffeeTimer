@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Coffee Timer</string>
+    <string name="count_label_text">00:00</string>
+    <string name="start_reset_button_text">start</string>
+</resources>

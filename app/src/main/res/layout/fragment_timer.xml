@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".TimerFragment">
+
+    <TextView
+        android:id="@+id/count_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/count_label_text"
+        android:textSize="68sp"
+        android:textColor="#C0C0C0"
+        android:includeFontPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/start_reset_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/start_reset_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/start"
+        android:contentDescription="start or reset timer"
+        style="?android:attr/borderlessButtonStyle"
+        app:layout_constraintTop_toBottomOf="@id/count_label"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TableLayout
+        android:id="@+id/time_table"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintTop_toBottomOf="@id/start_reset_button"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="時間(s)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:layout_marginRight="1dp"
+                android:includeFontPadding="false"
+                android:background="@color/headergrey"/>
+            <TextView
+                android:id="@+id/toggle_unit"
+                android:text="湯量(g)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:includeFontPadding="false"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@color/headergrey" />
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/delete_row_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="－"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="44dp"
+        app:layout_constraintTop_toBottomOf="@id/time_table"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/add_row_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="＋"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="44dp"
+        app:layout_constraintTop_toBottomOf="@id/time_table"
+        app:layout_constraintLeft_toRightOf="@id/delete_row_button" />
+
+    <TextView
+        android:id="@+id/total_amount_of_water_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="総湯量(g)"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        android:labelFor="@id/total_amount_of_water"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="@id/time_table"
+        app:layout_constraintLeft_toRightOf="@id/time_table"/>
+    <EditText
+        android:id="@+id/total_amount_of_water"
+        android:hint="整数"
+        android:inputType="number"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textSize="24sp"
+        android:layout_marginLeft="20dp"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/total_amount_of_water_label"
+        app:layout_constraintLeft_toRightOf="@id/time_table"/>
+
+    <TextView
+        android:id="@+id/grind_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="挽き目"
+        android:textSize="16sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:labelFor="@id/grind"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/total_amount_of_water"
+        app:layout_constraintLeft_toRightOf="@id/time_table"/>
+    <EditText
+        android:id="@+id/grind"
+        android:hint="整数"
+        android:inputType="number"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/grind_label"
+        app:layout_constraintLeft_toRightOf="@id/time_table" />
+
+    <TextView
+        android:id="@+id/temperature_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="湯温(℃)"
+        android:textSize="16sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:labelFor="@id/temperature"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/grind"
+        app:layout_constraintLeft_toRightOf="@id/time_table"/>
+    <EditText
+        android:id="@+id/temperature"
+        android:hint="整数"
+        android:inputType="number"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/temperature_label"
+        app:layout_constraintLeft_toRightOf="@id/time_table" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

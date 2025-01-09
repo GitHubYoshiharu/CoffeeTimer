@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#FFFF0000</color>
+    <color name="grey">#FF808080</color>
+    <color name="finishedgrey">#FF77787B</color>
+    <color name="cellblue">#FFE8F0FE</color>
+    <color name="headerblue">#FF5B95F9</color>
+    <color name="headergrey">#FF777777</color>
+    <color name="cellgrey">#FFA1A3A6</color>
+</resources>

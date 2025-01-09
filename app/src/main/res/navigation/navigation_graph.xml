@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@+id/tab_timer">
+
+    <fragment
+        android:id="@+id/tab_timer"
+        android:name="com.example.coffeetimer.TimerFragment"
+        android:label="timer" />
+
+    <fragment
+        android:id="@+id/tab_recipe"
+        android:name="com.example.coffeetimer.RecipeFragment"
+        android:label="recipe" />
+</navigation>
