@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 
 class TimerFragment : Fragment() {
@@ -27,7 +26,7 @@ class TimerFragment : Fragment() {
     private var isStarted = false
     private var isCountdown = true // 本当は初期化したくない
     private var canNavigate = false
-    // まだViewが生成されていないので、インスタンスの代入はonCreateで行う必要がある
+    // まだViewが生成されていないので、インスタンスの代入はonViewCreatedで行う必要がある
     private lateinit var countText : TextView
     private lateinit var timeTable : TableLayout
     private lateinit var toggleUnit : TextView
@@ -99,28 +98,28 @@ class TimerFragment : Fragment() {
         val sharedPref = activity?.getPreferences(MODE_PRIVATE)
         if (sharedPref != null) {
             with(sharedPref.edit()){
-                if(sharedPref.all["unit_gram"]==null){
+                if(sharedPref.all["unit_gram"] == null){
                     putBoolean("unit_gram", true)
                     apply()
                     toggleUnit.text = "湯量(g)"
-                } else if(sharedPref.all["unit_gram"]==true){
+                } else if(sharedPref.all["unit_gram"] == true){
                     toggleUnit.text = "湯量(g)"
                 } else {
                     toggleUnit.text = "湯量(%)"
                 }
             }
 
-            if(sharedPref.all["amount_of_water"]==null || sharedPref.all["amount_of_water"]==-1){
+            if(sharedPref.all["amount_of_water"] == null || sharedPref.all["amount_of_water"] == -1){
                 totalAmountOfWater.text = ""
             } else {
                 totalAmountOfWater.text = sharedPref.all["amount_of_water"].toString()
             }
-            if(sharedPref.all["grind"]==null || sharedPref.all["grind"]==-1){
+            if(sharedPref.all["grind"] == null || sharedPref.all["grind"] == -1){
                 grind.text = ""
             } else {
                 grind.text = sharedPref.all["grind"].toString()
             }
-            if(sharedPref.all["temperature"]==null || sharedPref.all["temperature"]==-1){
+            if(sharedPref.all["temperature"] == null || sharedPref.all["temperature"] == -1){
                 temperature.text = ""
             } else {
                 temperature.text = sharedPref.all["temperature"].toString()
@@ -128,13 +127,13 @@ class TimerFragment : Fragment() {
 
             // データはMap構造で保存されているので、参照する順番を合わせる必要がある
             for(i in 1..sharedPref.all.size /* 終端を決めなきゃいけないのでテキトーに設定 */){
-                if(sharedPref.all["time_$i"]==null) break
+                if(sharedPref.all["time_$i"] == null) break
                 layoutInflater.inflate(R.layout.tablerow, timeTable)
                 val row = timeTable.getChildAt(i) as TableRow
                 val timeCell = row.getChildAt(0) as TextView
                 val waterCell = row.getChildAt(1) as TextView
                 timeCell.text = sharedPref.all["time_$i"].toString()
-                if(sharedPref.all["water_$i"]==-1) {
+                if(sharedPref.all["water_$i"] == -1) {
                     waterCell.text = ""
                 } else {
                     waterCell.text = sharedPref.all["water_$i"].toString()
@@ -239,8 +238,8 @@ class TimerFragment : Fragment() {
         }
 
         addRowButton.setOnClickListener {
-            // 画面に収まる行数に制限する
-            if(timeTable.childCount-1 >= 7) return@setOnClickListener
+            // 画面に収まる行数に制限する→スクロール可能にすることで考慮不要にした
+            //if(timeTable.childCount-1 >= 10) return@setOnClickListener
             layoutInflater.inflate(R.layout.tablerow, timeTable)
             deleteRowButton.isEnabled = true
         }

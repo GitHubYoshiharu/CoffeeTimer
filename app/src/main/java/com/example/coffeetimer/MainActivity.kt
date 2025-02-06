@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_UNLABELED
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +14,8 @@ class MainActivity : AppCompatActivity() {
 
         val fragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = fragment.navController
-        findViewById<BottomNavigationView>(R.id.navbar_view)
-            .setupWithNavController(navController)
+        val navbarView = findViewById<BottomNavigationView>(R.id.navbar_view)
+        navbarView.labelVisibilityMode = LABEL_VISIBILITY_UNLABELED // テキストを非表示にする
+        navbarView.setupWithNavController(navController)
     }
 }
