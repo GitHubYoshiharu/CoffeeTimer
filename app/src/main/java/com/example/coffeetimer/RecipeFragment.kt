@@ -82,9 +82,9 @@ class RecipeFragment : Fragment() {
                             recipes[idx].id = generatedId.toInt()
                             faButton.isEnabled = true
                         }
+                        // レシピのタイトルを更新するため
+                        recyclerAdapter.notifyItemChanged(position, "Do not close recipecard")
                     }
-                    // レシピのタイトルを更新するため
-                    recyclerAdapter.notifyItemChanged(position, "Do not close recipecard")
                     Snackbar.make(view, "レシピを保存しました", 1000/* ms */)
                         .show()
                 }

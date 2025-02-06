@@ -14,3 +14,4 @@
 .cxx
 local.properties
 key_android_app_noah.jks
+*.apk
