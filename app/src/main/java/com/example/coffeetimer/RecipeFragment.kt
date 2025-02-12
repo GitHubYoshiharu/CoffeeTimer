@@ -17,7 +17,9 @@ import com.example.coffeetimer.data.RecipeDao
 import com.example.coffeetimer.data.RecipeDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 
 class RecipeFragment : Fragment() {
@@ -49,11 +51,12 @@ class RecipeFragment : Fragment() {
         val db = RecipeDatabase.getDatabase( requireNotNull(this.activity).application )
         recipeDao = db.recipeDao()
 
-        lifecycleScope.launch {
-            recipes = recipeDao.selectAll() as ArrayList<Recipe> // 変更可能のリストに変換する
+        lifecycleScope.launch(Dispatchers.Main){
+            withContext(Dispatchers.IO){
+                recipes = recipeDao.selectAll() as ArrayList<Recipe> // 変更可能のリストに変換する
+            }
             recyclerAdapter = RecyclerAdapter(recipes)
             recyclerView.adapter = recyclerAdapter
-
             recyclerAdapter.setOnButtonClickListener(object:RecyclerAdapter.OnButtonClickListener{
                 @RequiresApi(Build.VERSION_CODES.O) // Instant.now()を使うために必要
                 override fun onSaveClick(position: Int, recipeId: Int) {
@@ -67,27 +70,31 @@ class RecipeFragment : Fragment() {
                         memo = holder.memoHolder.text?.toString(),
                         modifiedDateTime = Instant.now()
                     )
-                    lifecycleScope.launch {
+                    // TODO: 本来は、DB上のレシピの更新成功を確認してからメモリ上のレシピの更新やUIの更新を行うべき
+                    // →DB更新が失敗した場合にメモリ上のデータの更新を中止できるような順番で処理を記述している。
+                    lifecycleScope.launch(Dispatchers.Main) {
                         var generatedId: Long? = null
-                        if(recipeId == 0){
-                            generatedId = recipeDao.insert(inputtedRecipe)
-                        } else {
-                            recipeDao.update(inputtedRecipe)
+                        withContext(Dispatchers.IO){
+                            if(recipeId == 0){
+                                generatedId = recipeDao.insert(inputtedRecipe)
+                            } else {
+                                recipeDao.update(inputtedRecipe)
+                            }
                         }
-
                         val idx = recipes.indexOfFirst { it.id == recipeId }
                         recipes[idx] = inputtedRecipe
                         // DB上の値を更新・削除できるようにするために、自動生成されたidをレシピにセットする
                         if(generatedId != null) {
-                            recipes[idx].id = generatedId.toInt()
+                            recipes[idx].id = generatedId!!.toInt()
                             faButton.isEnabled = true
                         }
                         // レシピのタイトルを更新するため
                         recyclerAdapter.notifyItemChanged(position, "Do not close recipecard")
+                        Snackbar.make(view, "レシピを保存しました", 1000/* ms */)
+                            .show()
                     }
-                    Snackbar.make(view, "レシピを保存しました", 1000/* ms */)
-                        .show()
                 }
+
                 override fun onCancelClick(position: Int, recipeId: Int) {
                     if(recipeId == 0) {
                         val idx = recipes.indexOfFirst { it.id == 0 }
@@ -99,6 +106,7 @@ class RecipeFragment : Fragment() {
                         recyclerAdapter.notifyItemChanged(position, "Do not close recipecard")
                     }
                 }
+
                 override fun onDeleteClick(position: Int, recipeId: Int) {
                     android.app.AlertDialog.Builder(view.context)
                         .setTitle("このレシピを削除しますか？")
@@ -109,13 +117,16 @@ class RecipeFragment : Fragment() {
                                 if(recipeId == 0) {
                                     faButton.isEnabled = true
                                 } else {
-                                    lifecycleScope.launch {
+                                    // TODO: 本来は、DB上のレシピの削除成功を確認してからメモリ上のレシピの削除やUIの更新を行うべき
+                                    lifecycleScope.launch(Dispatchers.IO) {
                                         recipeDao.delete(recipeId)
                                     }
                                 }
                                 val idx = recipes.indexOfFirst { it.id == recipeId }
                                 recipes.removeAt(idx)
                                 recyclerAdapter.notifyItemRemoved(position)
+                                Snackbar.make(view, "レシピを削除しました", 1000/* ms */)
+                                    .show()
                             } catch (ignored: Exception) {
                             }
                         }.setNegativeButton("いいえ") { _: DialogInterface, _: Int ->
